@@ -37,6 +37,13 @@ runs:
     - run: ls -l -a
       shell: bash
 
+    # --- Secret Scanning ---
+    - name: Gitleaks scan
+      uses: zricethezav/gitleaks-action@master
+      with:
+        config-path: ./gitleaks.toml
+      if: always()
+
     # --- Software Composition Analysis (SCA) ---
     - name: Dependency Check
       uses: dependency-check/Dependency-Check_Action@main
@@ -114,12 +121,6 @@ runs:
       with:
         sarif_file: semgrep.sarif
       if: always()
-
-    # --- Secret Scanning ---
-    - name: Gitleaks scan
-      uses: zricethezav/gitleaks-action@master
-      with:
-        config-path: ./gitleaks.toml
 
 branding:
   icon: "activity"
