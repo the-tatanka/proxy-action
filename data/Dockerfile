@@ -7,6 +7,9 @@ RUN npm install
 COPY . /app
 RUN npm run build
 
+
+USER root
+
 # Stage 2
 FROM nginx
 RUN apt-get update && apt-get install -y curl && apt-get clean
