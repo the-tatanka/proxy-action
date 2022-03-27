@@ -1,0 +1,42 @@
+name: "Proxy action"
+description: "Action that calls other actions"
+
+inputs:
+  API_ID: # id of input
+    description: "Veracode API_ID"
+    required: true
+    # default: "World"
+  API_KEY: # id of input
+    description: "Veracode API_KEY"
+    required: true
+  path: # id of input
+    description: "Path to assets"
+    required: true
+    default: "."
+
+runs:
+  using: "composite"
+  steps:
+    #- run: echo Hello ${{ inputs.who-to-greet }}.
+    #  shell: bash
+    #- id: random-number-generator
+    #  run: echo "::set-output name=random-id::$(echo $RANDOM)"
+    #  shell: bash
+    #- run: echo "${{ github.action_path }}" >> $GITHUB_PATH
+    #  shell: bash
+
+    #- run: zip -r tractus.zip .
+    #  shell: bash
+
+    #- run: ls -l
+    #  shell: bash
+
+    #- run: cat results.json
+    #  shell: bash
+
+    - run: ls -l
+      shell: bash
+
+branding:
+  icon: "activity"
+  color: "gray-dark"
