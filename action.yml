@@ -34,7 +34,7 @@ runs:
     #- run: cat results.json
     #  shell: bash
 
-    - run: ls -l
+    - run: ls -l -a
       shell: bash
 
 branding:
