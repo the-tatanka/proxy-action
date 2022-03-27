@@ -8,7 +8,7 @@ COPY . /app
 RUN npm run build
 
 
-USER root
+# USER root
 
 # Stage 2
 FROM nginx
