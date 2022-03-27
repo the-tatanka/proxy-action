@@ -37,37 +37,6 @@ runs:
     - run: ls -l -a
       shell: bash
 
-    # --- Software Composition Analysis (SCA) ---
-    - name: Dependency Check
-      uses: dependency-check/Dependency-Check_Action@main
-      with:
-        project: "test"
-        # Automatically searches for dependency manager files in the repository
-        path: "."
-        # Exports the results in SARIF format for SARIF upload.
-        # Alternatively, other report formats can be selected, see command line arguments.
-        format: "SARIF"
-        # If results with a high severity are found, the workflow fails.
-        args: >
-          --failOnCVSS 7
-          --enableRetired
-      if: always()
-
-    - name: Upload DependencyCheck output as artifact
-      uses: actions/upload-artifact@v1
-      with:
-        name: dependency-check-report-sarif
-        path: ${{ github.workspace }}/reports
-      if: always()
-
-    # Upload findings to GitHub Advanced Security Dashboard
-    - name: Upload SARIF file for GitHub Advanced Security Dashboard
-      uses: github/codeql-action/upload-sarif@v1
-      with:
-        # Path to SARIF file relative to the root of the repository
-        sarif_file: ${{ github.workspace }}/reports/dependency-check-report.sarif
-      if: always()
-
     # --- Static Application Security Testing (SAST) ---
     - uses: returntocorp/semgrep-action@v1
       id: semgrep
