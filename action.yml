@@ -37,6 +37,7 @@ runs:
     - run: ls -l -a
       shell: bash
 
+    # --- Software Composition Analysis (SCA) ---
     - name: Dependency Check
       uses: dependency-check/Dependency-Check_Action@main
       with:
@@ -50,6 +51,7 @@ runs:
         args: >
           --failOnCVSS 7
           --enableRetired
+        if: always()
 
     - name: Upload DependencyCheck output as artifact
       uses: actions/upload-artifact@v1
@@ -64,6 +66,53 @@ runs:
       with:
         # Path to SARIF file relative to the root of the repository
         sarif_file: ${{ github.workspace }}/reports/dependency-check-report.sarif
+      if: always()
+
+    # --- Static Application Security Testing (SAST) ---
+    - uses: returntocorp/semgrep-action@v1
+      id: semgrep
+      with:
+        config: >- # more at semgrep.dev/explore
+          p/security-audit
+          p/owasp-top-ten
+          p/xss
+          p/r2c
+          p/react
+          p/secrets
+          p/docker
+          p/typescript
+        generateSarif: "1"
+      if: always()
+
+      # == Optional settings in the `with:` block
+      # Instead of `config:`, use rules set in Semgrep App.
+      # Get your token from semgrep.dev/manage/settings.
+      #   publishToken: ${{ secrets.SEMGREP_APP_TOKEN }}
+
+      # Never fail the build due to findings on pushes.
+      # Instead, just collect findings for semgrep.dev/manage/findings
+      #   auditOn: push
+
+      # Upload findings to GitHub Advanced Security Dashboard [step 1/2]
+      # See also the next step.
+      #   generateSarif: "1"
+
+      # Change job timeout (default is 1800 seconds; set to 0 to disable)
+      # env:
+      #   SEMGREP_TIMEOUT: 300
+
+    - name: Upload Semgrep output as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: semgrep.sarif
+        path: semgrep.sarif
+      if: always()
+
+    # Upload findings to GitHub Advanced Security Dashboard [step 2/2]
+    - name: Upload SARIF file for GitHub Advanced Security Dashboard
+      uses: github/codeql-action/upload-sarif@v1
+      with:
+        sarif_file: semgrep.sarif
       if: always()
 
 branding:
