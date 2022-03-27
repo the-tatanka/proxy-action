@@ -115,6 +115,12 @@ runs:
         sarif_file: semgrep.sarif
       if: always()
 
+    # --- Secret Scanning ---
+    - name: Gitleaks scan
+      uses: zricethezav/gitleaks-action@master
+      with:
+        config-path: ./gitleaks.toml
+
 branding:
   icon: "activity"
   color: "gray-dark"
