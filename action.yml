@@ -51,7 +51,7 @@ runs:
         args: >
           --failOnCVSS 7
           --enableRetired
-        if: always()
+      if: always()
 
     - name: Upload DependencyCheck output as artifact
       uses: actions/upload-artifact@v1
